@@ -1,4 +1,6 @@
 import json
+import secrets
+
 import bcrypt
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -36,3 +38,29 @@ def register(request):
  )
         user_object.save()
         return JsonResponse({"is_created": True}, status=201)
+
+@csrf_exempt
+def sessions(request):
+    if request.method != 'POST':
+        return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
+
+    body_json = json.loads(request.body)
+    try:
+        json_email = body_json['email']
+        json_password = body_json['password']
+    except KeyError:
+        return JsonResponse({"error": "Faltán parámetros"}, status=400)
+
+    try:
+        db_user = Person.objects.get(email=json_email)
+    except Person.DoesNotExist:
+        return JsonResponse({"error": "Usuario no encontrado"}, status=404)
+
+    if bcrypt.checkpw(json_password.encode('utf8'), db_user.password.encode('utf8')):
+        random_token = secrets.token_hex(10)
+        db_user.token = random_token
+        db_user.save()
+        return JsonResponse({"sessionToken": random_token}, status=201)
+    else:
+        return JsonResponse({"error": "Contraseña incorrecta"}, status=401)
+

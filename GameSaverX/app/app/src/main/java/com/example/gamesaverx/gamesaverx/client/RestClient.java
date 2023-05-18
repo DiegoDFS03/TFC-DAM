@@ -1,8 +1,12 @@
 package com.example.gamesaverx.gamesaverx.client;
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +16,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.gamesaverx.gamesaverx.Screens.Login;
+import com.example.gamesaverx.gamesaverx.Screens.Register;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,8 +65,8 @@ public class RestClient {
                     public void onResponse(JSONObject response) {
 
                         Toast.makeText(context, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show();
-                        //Intent intent = new Intent(context,Login.class);
-                        //context.startActivity(intent);
+                        Intent intent = new Intent(context, Login.class);
+                        context.startActivity(intent);
 
                     }
                 },
@@ -82,5 +88,54 @@ public class RestClient {
                     }
                 });
         this.queue.add(request);
+    }
+    public void login(EditText email, EditText password, Context context) {
+        queue = Volley.newRequestQueue(context);
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email.getText().toString());
+            requestBody.put("password", password.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/v1/sessions",
+                requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Guardando el id del usuario en las sharedPreferences
+                        SharedPreferences prefs = context.getSharedPreferences("user", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        try {
+                            editor.putString("tokenSession", response.getString("sessionToken"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        editor.apply();
+                        Intent intent = new Intent(context, Register.class);
+                        context.startActivity(intent);
+
+                        try {
+                            Toast.makeText(context, response.getString("tokenSession"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        switch (error.networkResponse.statusCode) {
+                            case 404:
+                                email.setError("Usuario no registrado");
+                                break;
+                            case 401:
+                                password.setError("Contraseña incorrecta");
+                        }
+                    }
+                });
+        queue.add(request);
     }
 }
