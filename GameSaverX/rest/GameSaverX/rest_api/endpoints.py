@@ -7,6 +7,18 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Person,Offer,Store,UserOffer
 
 
+def log(request):
+    if request.method != 'GET':
+        return JsonResponse({"error": "Método http no soportado"})
+
+    sessionToken = request.headers.get('Token')
+    try:
+        user = Person.objects.get(token=sessionToken)
+    except Person.DoesNotExist:
+        return JsonResponse({"error": "Token inválido"}, status=404)
+
+    return JsonResponse({"status": "ok"}, status=200)
+
 @csrf_exempt
 def register(request):
     if request.method != "POST":

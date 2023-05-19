@@ -21,6 +21,7 @@ from rest_api import endpoints
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('v1/log', endpoints.log),
     path('v1/users', endpoints.register),
     path('v1/sessions', endpoints.sessions),
 

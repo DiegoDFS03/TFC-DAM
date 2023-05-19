@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,8 +20,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.gamesaverx.gamesaverx.Screens.Login;
 import com.example.gamesaverx.gamesaverx.Screens.Register;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RestClient {
 
@@ -30,16 +35,48 @@ public class RestClient {
 
     private RequestQueue queue;
 
-    private RestClient(Context context){
+    private RestClient(Context context) {
         this.context = context;
     }
+
     private static RestClient singleton = null;
 
-    public static RestClient getInstance(Context context){
-        if (singleton==null){
+    public static RestClient getInstance(Context context) {
+        if (singleton == null) {
             singleton = new RestClient(context);
         }
         return singleton;
+    }
+
+    public void isLogged(String sessionToken) {
+        queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/v1/log",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Intent intent = new Intent(context, Register.class);
+                        Toast.makeText(context, "¡Logueado con éxito!", Toast.LENGTH_LONG).show();
+                        context.startActivity(intent);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+                        preferences.edit().remove("tokenSession").commit();
+
+                        Intent intent = new Intent(context, Login.class);
+                        context.startActivity(intent);
+                    }
+                },
+                context
+        );
+
+        this.queue.add(request);
     }
 
     public void register(TextView editTextName, TextView editTextSurnames, TextView editTextEmail, TextView editTextPassword, TextView editTextPassword2) {
@@ -76,11 +113,10 @@ public class RestClient {
                         if (error.networkResponse == null) {
                             Toast.makeText(context, "Sin conexión", Toast.LENGTH_LONG).show();
 
-                        } else if(error.networkResponse.statusCode == 409) {
+                        } else if (error.networkResponse.statusCode == 409) {
                             Toast.makeText(context, "Cuenta ya registrada", Toast.LENGTH_SHORT).show();
 
-                        }
-                        else {
+                        } else {
                             int serverCode = error.networkResponse.statusCode;
                             Toast.makeText(context, "Error: " + serverCode, Toast.LENGTH_LONG).show();
 
@@ -89,6 +125,7 @@ public class RestClient {
                 });
         this.queue.add(request);
     }
+
     public void login(EditText email, EditText password, Context context) {
         queue = Volley.newRequestQueue(context);
         JSONObject requestBody = new JSONObject();
@@ -137,5 +174,31 @@ public class RestClient {
                     }
                 });
         queue.add(request);
+    }
+
+}
+class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
+    private Context context;
+
+    public JsonObjectRequestWithCustomAuth(int method,
+                                           String url,
+                                           @Nullable JSONObject jsonRequest,
+                                           Response.Listener<JSONObject> listener,
+                                           @Nullable Response.ErrorListener errorListener,
+                                           Context context) {
+        super(method, url, jsonRequest, listener, errorListener);
+        this.context = context;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String sessionToken = preferences.getString("tokenSession", null);
+        //PARA PROBAR LA PANTALLA
+        /*String sessionToken = "";*/
+
+        HashMap<String, String> myHeaders = new HashMap<>();
+        myHeaders.put("Token", sessionToken);
+        return myHeaders;
     }
 }
