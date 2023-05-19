@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class User(models.Model):
+class Person(models.Model):
     name = models.CharField(max_length=50)
     surnames = models.CharField(max_length=100)
     email = models.EmailField()
@@ -21,6 +21,7 @@ class Offer(models.Model):
     image = models.CharField(max_length=50)
     original_price = models.DecimalField(max_digits=8, decimal_places=2)
     genre = models.CharField(max_length=50)
+    url = models.URLField(max_length=200,null=True)
     release_date = models.DateField()
     developer = models.CharField(max_length=70)
     publisher = models.CharField(max_length=70)
@@ -32,5 +33,5 @@ class Offer(models.Model):
 
 class UserOffer(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     date = models.DateField(auto_now=True)
