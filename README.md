@@ -5,3 +5,17 @@
 <p align="left">
    <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
    </p>
+
+## Índice
+- [Descripción](#descripción)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Instalación](#instalación)
+- [Uso](#uso)
+
+## Descripción
+Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de videojuegos. Permite a los usuarios explorar y encontrar las mejores ofertas disponibles en tiendas populares como Xbox y Playstation. La aplicación ofrece una interfaz intuitiva para navegar a través de las ofertas y guardar los juegos u ofertas favoritas de los usuarios.
+
+## Tecnologías Utilizadas
+- Django: Framework de desarrollo web en Python utilizado para la construcción del backend de la aplicación.
+- Android Studio: Se usa para desarrollar una interfaz de usuario para dispositivos móviles.
+- Base de Datos: Se utiliza una base de datos para almacenar la información de las ofertas, tiendas y usuarios.
