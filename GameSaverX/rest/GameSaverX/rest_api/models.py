@@ -21,6 +21,7 @@ class Offer(models.Model):
     image = models.CharField(max_length=50)
     original_price = models.DecimalField(max_digits=8, decimal_places=2)
     genre = models.CharField(max_length=50)
+    url = models.URLField(max_length=200,null=True)
     release_date = models.DateField()
     developer = models.CharField(max_length=70)
     publisher = models.CharField(max_length=70)
