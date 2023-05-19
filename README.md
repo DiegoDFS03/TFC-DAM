@@ -13,7 +13,7 @@
 - [Uso](#uso)
 
 ## Descripción
-Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de videojuegos. Permite a los usuarios explorar y encontrar las mejores ofertas disponibles en tiendas populares como Xbox y Playstation. La aplicación ofrece una interfaz intuitiva para navegar a través de las ofertas y guardar los juegos u ofertas favoritas de los usuarios.
+Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de videojuegos. Permite a los usuarios explorar y encontrar las mejores ofertas disponibles en tiendas populares como Xbox y Playstation. La aplicación ofrece una interfaz intuitiva para navegar a través de las ofertas y guardar las ofertas favoritas de los usuarios.
 
 ## Tecnologías Utilizadas
 - Django: Framework de desarrollo web en Python utilizado para la construcción del backend de la aplicación.
