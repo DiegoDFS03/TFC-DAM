@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.gamesaverx.gamesaverx.Screens.Drawer;
 import com.example.gamesaverx.gamesaverx.Screens.Login;
 import com.example.gamesaverx.gamesaverx.Screens.Register;
 
@@ -58,7 +59,7 @@ public class RestClient {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Intent intent = new Intent(context, Register.class);
+                        Intent intent = new Intent(context, Drawer.class);
                         Toast.makeText(context, "¡Logueado con éxito!", Toast.LENGTH_LONG).show();
                         context.startActivity(intent);
                     }
@@ -151,7 +152,7 @@ public class RestClient {
                             e.printStackTrace();
                         }
                         editor.apply();
-                        Intent intent = new Intent(context, Register.class);
+                        Intent intent = new Intent(context, Drawer.class);
                         context.startActivity(intent);
 
                         try {
