@@ -5,57 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gamesaverx.Screens.Home">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:queryHint="Buscar..."
+        app:layout_constraintTop_toBottomOf="@id/ofertasText"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutprincipal" />
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
-    <LinearLayout
-        android:id="@+id/layoutprincipal"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/ofertasText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Ofertas"
+        android:textSize="34sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/ofertasText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Ofertas"
-            android:textSize="34sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/searchButton"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="Buscar"
-                android:src="@drawable/ic_search" />
-
-            <ImageButton
-                android:id="@+id/filterButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="Filtrar y/o ordenar"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_filter" />
-        </LinearLayout>
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

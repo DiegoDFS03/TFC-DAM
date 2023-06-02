@@ -5,10 +5,6 @@
             android:title="Inicio"
             android:icon="@drawable/ic_home" />
         <item
-            android:id="@+id/action_search"
-            android:title="Búsqueda"
-            android:icon="@drawable/ic_search" />
-        <item
             android:id="@+id/action_saved"
             android:title="Favoritos"
             android:icon="@drawable/ic_save" />

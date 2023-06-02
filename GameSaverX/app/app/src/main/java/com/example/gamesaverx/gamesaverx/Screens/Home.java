@@ -3,7 +3,8 @@ package com.example.gamesaverx.gamesaverx.Screens;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.SearchView;
+import android.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,25 +22,25 @@ import com.example.gamesaverx.gamesaverx.client.RestClient;
 import java.util.List;
 
 
-public class Home extends Fragment implements OnOfferClickListener, ResponseListener {
-
+public class Home extends Fragment implements OnOfferClickListener, ResponseListener,SearchView.OnQueryTextListener {
+    private SearchView searchView;
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
     private RestClient restClient;
     private List<Offer> items;
     private Context context;
-
-
-    public static Home newInstance() {
-        Home fragment = new Home();
-        return fragment;
-    }
+    private final int size = 20;
+    private int offset = 0;
+    private String query= "";
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
+
+        searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
@@ -51,7 +52,22 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
         recyclerAdapter = new RecyclerAdapter(items,this);
         recyclerView.setAdapter(recyclerAdapter);
 
+        peticion(query);
+
         return view;
+    }
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    // Método que llama cada vez que se escribe o borra un caracter
+    @Override
+    public boolean onQueryTextChange(String query) {
+        offset = 0;
+        this.query = query;
+        peticion(query);
+        return false;
     }
 
     @Override
@@ -59,8 +75,13 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
 
     }
 
+    private void peticion(String query) {
+        restClient = RestClient.getInstance(context);
+        restClient.offers(query, size, offset,this, recyclerView, this);
+    }
+
     @Override
-    public void onWinesResponse(int count) {
+    public void onOffersResponse(int count) {
 
     }
 }

@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,15 +19,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.gamesaverx.gamesaverx.Interfaces.OnOfferClickListener;
+import com.example.gamesaverx.gamesaverx.Interfaces.ResponseListener;
 import com.example.gamesaverx.gamesaverx.Screens.Drawer;
 import com.example.gamesaverx.gamesaverx.Screens.Login;
 import com.example.gamesaverx.gamesaverx.Screens.Register;
+import com.example.gamesaverx.gamesaverx.Utils.Offer;
+import com.example.gamesaverx.gamesaverx.Utils.RecyclerAdapter;
 
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RestClient {
@@ -176,6 +187,50 @@ public class RestClient {
                 });
         queue.add(request);
     }
+    public void offers(String name, int size, int offset, OnOfferClickListener offerListener, RecyclerView recyclerView, ResponseListener listener) {
+        queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                BASE_URL + "/v1/offers?size=" + size + "&offset=" + offset + "&name=" + name,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        List<Offer> itemList = new ArrayList() {};
+                        int count = 0;
+                        try {
+                            count = response.getInt("count");
+                            JSONArray results = response.getJSONArray("results");
+
+
+                            for (int i=0; i < results.length(); i++) {
+                                JSONObject offer = results.getJSONObject(i);
+                                Offer newOffer;
+                                    newOffer = new Offer(offer.getString("title"),offer.getString("store__name"),BASE_URL + offer.getString("image"),
+                                            offer.getString("discount_price"),offer.getString("original_price"), offer.getString("end_date"));
+                                itemList.add(newOffer);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(itemList, offerListener);
+                        recyclerView.setAdapter(recyclerAdapter);
+                        listener.onOffersResponse(count);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        queue.add(request);
+    }
+
 
 }
 class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {

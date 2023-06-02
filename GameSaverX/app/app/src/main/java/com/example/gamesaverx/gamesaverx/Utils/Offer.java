@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Offer implements Serializable {
-    private String title,store,image;
-    private BigDecimal discount_percentage,original_price;
-    private LocalDate end_date;
+    private String title,store,image,discount_percentage,original_price,end_date;
+
+
 
     public String getTitle() {
         return title;
@@ -22,19 +22,19 @@ public class Offer implements Serializable {
         return image;
     }
 
-    public BigDecimal getDiscount_percentage() {
+    public String getDiscount_percentage() {
         return discount_percentage;
     }
 
-    public BigDecimal getOriginal_price() {
+    public String getOriginal_price() {
         return original_price;
     }
 
-    public LocalDate getEnd_date() {
+    public String getEnd_date() {
         return end_date;
     }
 
-    public Offer(String title, String store, String image, BigDecimal discount_percentage, BigDecimal original_price, LocalDate end_date) {
+    public Offer(String title, String store, String image, String discount_percentage, String original_price, String end_date) {
         this.title = title;
         this.store = store;
         this.image = image;

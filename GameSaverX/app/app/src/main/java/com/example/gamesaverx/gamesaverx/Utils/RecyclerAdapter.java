@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -43,19 +44,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
         final Offer item = items.get(position);
         // Obtener los valores de original_price y discount_percentage
-        BigDecimal originalPrice = item.getOriginal_price();
-        BigDecimal discountPercentage = item.getDiscount_percentage();
+        String originalPrice = item.getOriginal_price();
+        String discountPercentage = item.getDiscount_percentage();
+
+        BigDecimal noriginalPrice = new BigDecimal(originalPrice);
+        BigDecimal ndiscountPercentage = new BigDecimal(discountPercentage);
 
         // Multiplicar original_price y discount_percentage para obtener el precio con descuento
-        BigDecimal discountedPrice = originalPrice.multiply(discountPercentage.divide(BigDecimal.valueOf(100)));
+        BigDecimal discountedPrice = noriginalPrice.multiply(ndiscountPercentage.divide(BigDecimal.valueOf(100)));
 
         //Obtener la fecha actual y la fecha de final de oferta
         LocalDate currentDate = LocalDate.now();
-        LocalDate endDate = item.getEnd_date();
-        long durationInDays = ChronoUnit.DAYS.between(currentDate, endDate);
+        String endDate = item.getEnd_date();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate end_date = LocalDate.parse(endDate, formatter);
+        long durationInDays = ChronoUnit.DAYS.between(currentDate, end_date);
 
         //Pasar a String las variables anteriores
-        String original_price = item.getOriginal_price().toString();
+
         String discounted_price = discountedPrice.toString();
         String time_left = String.valueOf(durationInDays);
 
@@ -63,7 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         Picasso.get().load(item.getImage()).into(holder.gameImage);
         holder.gameTitle.setText(item.getTitle());
         holder.storeName.setText(item.getStore());
-        holder.original_price.setText(original_price);
+        holder.original_price.setText(item.getOriginal_price());
         holder.percentage_discount.setText(item.getDiscount_percentage()+"%");
         holder.discount_price.setText(discounted_price);
         holder.time_left.setText(time_left+" días restantes");
@@ -71,7 +77,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     @Override
     public int getItemCount() {
-        return 0;
+        if(items != null)
+            return items.size();
+        else
+            return 0;
     }
     public class RecyclerHolder extends RecyclerView.ViewHolder{
         private ImageView gameImage;
