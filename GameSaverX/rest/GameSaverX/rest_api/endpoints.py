@@ -96,11 +96,11 @@ def offers(request):
     if size is None:
         if offset is None:
             ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('title',
-                                                                                 'store__name',
-                                                                                 'image',
-                                                                                 'discount_percentage',
-                                                                                 'original_price',
-                                                                                 'end_date')
+                                                                                   'store__name',
+                                                                                   'image',
+                                                                                   'discount_percentage',
+                                                                                   'original_price',
+                                                                                   'end_date')
         else:
             try:
                 offset = int(offset)
@@ -131,11 +131,11 @@ def offers(request):
                                                           'end_date')[offset:offset + size]
             else:
                 ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('title',
-                                                                                     'store__name',
-                                                                                     'image',
-                                                                                     'discount_percentage',
-                                                                                     'original_price',
-                                                                                     'end_date')[offset:offset + size]
+                                                                                       'store__name',
+                                                                                       'image',
+                                                                                       'discount_percentage',
+                                                                                       'original_price',
+                                                                                       'end_date')[offset:offset + size]
 
     count = Offer.objects.count()
 
@@ -150,3 +150,19 @@ def offers(request):
                             "end_date": offer[5]})
 
     return JsonResponse({"count": count, "results": results}, safe=False)
+
+
+def offer(request, id_game):
+    if request.method != "GET":
+        return JsonResponse({"error": "HTTP method not supported"}, status=405)
+
+    try:
+        offer = Offer.objects.get(id=id_game)
+    except Offer.DoesNotExist:
+        return JsonResponse({"error": "No existe"}, status=404)
+
+    return JsonResponse({"id": id_game, "title": offer.title, "description": offer.description, "image": offer.image,
+                         "original_price": offer.original_price, "genre": offer.genre,
+                         "url": offer.url,
+                         "release_date": offer.release_date, "developer": offer.developer, "publisher": offer.publisher,
+                         "discount_percentage": offer.discount_percentage, "end_date": offer.end_date})

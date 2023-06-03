@@ -24,6 +24,7 @@ urlpatterns = [
     path('v1/log', endpoints.log),
     path('v1/users', endpoints.register),
     path('v1/sessions', endpoints.sessions),
-    path('v1/offers', endpoints.offers)
+    path('v1/offers', endpoints.offers),
+    path('v1/offer/<str:id_game>', endpoints.offer)
 
 ]

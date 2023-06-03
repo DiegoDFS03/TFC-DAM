@@ -27,7 +27,6 @@ class Offer(models.Model):
     publisher = models.CharField(max_length=70)
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     discount_percentage = models.DecimalField(max_digits=5,decimal_places=0)
-    start_date = models.DateField()
     end_date = models.DateField()
 
 

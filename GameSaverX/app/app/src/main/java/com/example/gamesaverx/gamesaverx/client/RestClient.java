@@ -213,6 +213,7 @@ public class RestClient {
                                 newOffer.setDiscount_percentage(String.valueOf(new BigDecimal(offer.getString("discount_percentage"))));
                                 newOffer.setOriginal_price(String.valueOf(new BigDecimal(offer.getString("original_price"))));
                                 newOffer.setEnd_date(offer.getString("end_date"));
+                                newOffer.setId(offer.getString("id"));
                                 itemList.add(newOffer);
                             }
                         } catch (JSONException e) {

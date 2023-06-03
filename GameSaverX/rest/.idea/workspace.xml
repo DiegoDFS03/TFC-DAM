@@ -5,13 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b874e025-7ebc-40ee-8cc2-017fab3d6507" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Home.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Interfaces/IsSavedListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/DetailFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/drawable/ic_add.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/drawable/ic_remove.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/fragment_detail.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GameSaverX/rest_api/migrations/0004_remove_offer_start_date.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Utils/Offer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Utils/Offer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Utils/RecyclerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Utils/RecyclerAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/client/RestClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/client/RestClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/res/drawable/ic_filter.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/res/layout/item_view_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/item_view_list.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameSaverX/GameSaverX/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameSaverX/GameSaverX/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameSaverX/rest_api/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameSaverX/rest_api/endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameSaverX/rest_api/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameSaverX/rest_api/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

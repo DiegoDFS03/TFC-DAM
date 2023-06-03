@@ -6,13 +6,23 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Offer implements Serializable {
-    private String title,store,image,discount_percentage,original_price,end_date;
+    private String title;
+    private String store;
+    private String image;
+    private String discount_percentage;
+    private String original_price;
+    private String end_date;
+
+    private String id;
+
 
     public Offer() {
 
     }
 
-
+    public String getId() {
+        return id;
+    }
     public String getTitle() {
         return title;
     }
@@ -61,13 +71,19 @@ public class Offer implements Serializable {
         this.end_date = end_date;
     }
 
-    public Offer(String title, String store, String image, String discount_percentage, String original_price, String end_date) {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    public Offer(String title, String store, String image, String discount_percentage, String original_price, String end_date,String id) {
         this.title = title;
         this.store = store;
         this.image = image;
         this.discount_percentage = discount_percentage;
         this.original_price = original_price;
         this.end_date = end_date;
+        this.id = id;
     }
 }
 
