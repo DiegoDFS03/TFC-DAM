@@ -91,11 +91,11 @@ def offers(request):
     offset = request.GET.get("offset", None)
 
     # Nombre de la oferta
-    name = request.GET.get("name", None)
+    title = request.GET.get("title", None)
 
     if size is None:
         if offset is None:
-            ofertas = Offer.objects.filter(Q(name__startswith=name)).values_list('title',
+            ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('title',
                                                                                  'store__name',
                                                                                  'image',
                                                                                  'discount_percentage',
@@ -122,7 +122,7 @@ def offers(request):
             except ValueError:
                 return JsonResponse({"error": "Parámetro offset erróneo"}, status=400)
 
-            if name is None or len(name) == 0:
+            if title is None or len(title) == 0:
                 ofertas = Offer.objects.all().values_list('title',
                                                           'store__name',
                                                           'image',
@@ -130,7 +130,7 @@ def offers(request):
                                                           'original_price',
                                                           'end_date')[offset:offset + size]
             else:
-                ofertas = Offer.objects.filter(Q(name__startswith=name)).values_list('title',
+                ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('title',
                                                                                      'store__name',
                                                                                      'image',
                                                                                      'discount_percentage',

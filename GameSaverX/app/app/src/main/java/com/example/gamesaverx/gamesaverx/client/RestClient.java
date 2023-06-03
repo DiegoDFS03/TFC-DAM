@@ -187,12 +187,12 @@ public class RestClient {
                 });
         queue.add(request);
     }
-    public void offers(String name, int size, int offset, OnOfferClickListener offerListener, RecyclerView recyclerView, ResponseListener listener) {
+    public void offers(String title, int size, int offset, OnOfferClickListener offerListener, RecyclerView recyclerView, ResponseListener listener) {
         queue = Volley.newRequestQueue(context);
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                BASE_URL + "/v1/offers?size=" + size + "&offset=" + offset + "&name=" + name,
+                BASE_URL + "/v1/offers?size=" + size + "&offset=" + offset + "&title=" + title,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -204,11 +204,15 @@ public class RestClient {
                             JSONArray results = response.getJSONArray("results");
 
 
-                            for (int i=0; i < results.length(); i++) {
+                            for (int i = 0; i < results.length(); i++) {
                                 JSONObject offer = results.getJSONObject(i);
-                                Offer newOffer;
-                                    newOffer = new Offer(offer.getString("title"),offer.getString("store__name"),BASE_URL + offer.getString("image"),
-                                            offer.getString("discount_price"),offer.getString("original_price"), offer.getString("end_date"));
+                                Offer newOffer = new Offer();
+                                newOffer.setTitle(offer.getString("title"));
+                                newOffer.setStore(offer.getString("store__name"));
+                                newOffer.setImage(BASE_URL + offer.getString("image"));
+                                newOffer.setDiscount_percentage(String.valueOf(new BigDecimal(offer.getString("discount_percentage"))));
+                                newOffer.setOriginal_price(String.valueOf(new BigDecimal(offer.getString("original_price"))));
+                                newOffer.setEnd_date(offer.getString("end_date"));
                                 itemList.add(newOffer);
                             }
                         } catch (JSONException e) {

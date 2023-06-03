@@ -1,5 +1,6 @@
 package com.example.gamesaverx.gamesaverx.Utils;
 
+import android.graphics.Paint;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.example.gamesaverx.gamesaverx.Interfaces.OnOfferClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -50,9 +52,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         BigDecimal noriginalPrice = new BigDecimal(originalPrice);
         BigDecimal ndiscountPercentage = new BigDecimal(discountPercentage);
 
+
         // Multiplicar original_price y discount_percentage para obtener el precio con descuento
         BigDecimal discountedPrice = noriginalPrice.multiply(ndiscountPercentage.divide(BigDecimal.valueOf(100)));
-
+        BigDecimal discountPrice = noriginalPrice.subtract(discountedPrice);
+        discountPrice = discountPrice.setScale(2, RoundingMode.DOWN);
         //Obtener la fecha actual y la fecha de final de oferta
         LocalDate currentDate = LocalDate.now();
         String endDate = item.getEnd_date();
@@ -62,16 +66,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
         //Pasar a String las variables anteriores
 
-        String discounted_price = discountedPrice.toString();
+        String discount_price = discountPrice.toString();
         String time_left = String.valueOf(durationInDays);
 
 
         Picasso.get().load(item.getImage()).into(holder.gameImage);
         holder.gameTitle.setText(item.getTitle());
         holder.storeName.setText(item.getStore());
-        holder.original_price.setText(item.getOriginal_price());
+        holder.original_price.setText(item.getOriginal_price() + "€");
+        holder.original_price.setPaintFlags(holder.original_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.percentage_discount.setText(item.getDiscount_percentage()+"%");
-        holder.discount_price.setText(discounted_price);
+        holder.discount_price.setText(discount_price+"€");
         holder.time_left.setText(time_left+" días restantes");
     }
 
