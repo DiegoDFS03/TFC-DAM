@@ -239,8 +239,6 @@ def favourites(request):
                                "end_date": offer.offer.end_date})
         return JsonResponse({"results": favourites}, safe=False)
 
-
-@csrf_exempt
 def profile(request):
     token_cabeceras = request.headers.get("Token")
     if token_cabeceras is None:
@@ -251,17 +249,20 @@ def profile(request):
         except Person.DoesNotExist:
             return JsonResponse({"error": "Usuario no logeado"}, status=401)
     if request.method == "GET":
+
+
         json_response = {
             "name": u.name,
             "surnames": u.surnames,
             "email": u.email,
         }
+
+        if request.method == "PUT":
+            body_json = json.loads(request.body)
+
+            u.name = body_json["name"]
+            u.surnames = body_json["surnames"]
+            u.save()
+            return JsonResponse({"status": "Todo OK"}, status=200)
+
         return JsonResponse(json_response, status=200)
-
-    if request.method == "PUT":
-        body_json = json.loads(request.body)
-
-        u.name = body_json["name"]
-        u.surnames = body_json["surnames"]
-        u.save()
-        return JsonResponse({"status": "OK"}, status=200)

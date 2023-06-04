@@ -29,8 +29,6 @@ public class Drawer extends AppCompatActivity {
         //Para que se abra el "HomeFragment" desde el principio
         loadFragment(homeFragment);
 
-
-
     }
 
     //Método para mostrar cada fragment
