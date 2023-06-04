@@ -520,14 +520,9 @@ public class RestClient {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(context, "SE GUARDÓ CORRECTAMENTE", Toast.LENGTH_SHORT).show();
-                        //CAMBIO A LA SIGUIENTE PANTALLA
-                        Bundle bundle = new Bundle();
-                        bundle.putString("fragment", "profile");
+                        Toast.makeText(context, "Guardado correctamente", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, Drawer.class);
-                        intent.putExtras(bundle);
                         context.startActivity(intent);
-                        //FALTA LLAMAR AL FRAGMENT DE PERFIL
                     }
                 },
                 new Response.ErrorListener() {
