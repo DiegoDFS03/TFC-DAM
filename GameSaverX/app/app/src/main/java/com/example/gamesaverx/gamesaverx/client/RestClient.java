@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -454,7 +453,7 @@ public class RestClient {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            name.setText("Hola,"+response.getString("name") + " " + response.getString("surnames"));
+                            name.setText(response.getString("name") + " " + response.getString("surnames"));
                             email.setText(response.getString("email"));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -471,6 +470,7 @@ public class RestClient {
         );
         queue.add(request);
     }
+
     public void fillProfile(EditText name, EditText surnames){
 
         queue = Volley.newRequestQueue(context);
