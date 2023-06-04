@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b874e025-7ebc-40ee-8cc2-017fab3d6507" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/EditProfile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/activity_edit_profile.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/ChangePassword.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/activity_change_password.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Profile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/client/RestClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/client/RestClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameSaverX/rest_api/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameSaverX/rest_api/endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -536,6 +536,42 @@ public class RestClient {
 
         this.queue.add(request);
     }
+    public void changePassword(EditText oldPassword, EditText newPassword){
+
+        queue = Volley.newRequestQueue(context);
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("oldPassword", oldPassword.getText().toString());
+            body.put("newPassword", newPassword.getText().toString());
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.POST,
+                BASE_URL + "/v1/password",
+                body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(context, "Contraseña Cambiada", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, Drawer.class);
+                        context.startActivity(intent);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse.statusCode == 404){
+                            Toast.makeText(context, "Contraseña antigua incorrecta", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                context
+        );
+
+        this.queue.add(request);
+    }
 
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
