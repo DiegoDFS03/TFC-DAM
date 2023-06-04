@@ -471,6 +471,72 @@ public class RestClient {
         queue.add(request);
     }
 
+    public void fillProfile(EditText name, EditText surnames){
+
+        queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/v1/profile",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            name.setText(response.getString("name"));
+                            surnames.setText(response.getString("surnames"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                },
+                context
+        );
+
+        this.queue.add(request);
+    }
+
+    public void editProfile(EditText name, EditText surnames){
+
+        queue = Volley.newRequestQueue(context);
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("name", name.getText().toString());
+            body.put("surnames", surnames.getText().toString());
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.PUT,
+                BASE_URL + "/v1/profile",
+                body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(context, "Guardado correctamente", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, Drawer.class);
+                        context.startActivity(intent);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                context
+        );
+
+        this.queue.add(request);
+    }
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
