@@ -238,3 +238,31 @@ def favourites(request):
                                "original_price": offer.offer.original_price,
                                "end_date": offer.offer.end_date})
         return JsonResponse({"results": favourites}, safe=False)
+
+def profile(request):
+    token_cabeceras = request.headers.get("Token")
+    if token_cabeceras is None:
+        return JsonResponse({"error": "Falta token en la cabecera"}, status=401)
+    else:
+        try:
+            u = Person.objects.get(token=token_cabeceras)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Usuario no logeado"}, status=401)
+    if request.method == "GET":
+
+
+        json_response = {
+            "name": u.name,
+            "surnames": u.surnames,
+            "email": u.email,
+        }
+
+        if request.method == "PUT":
+            body_json = json.loads(request.body)
+
+            u.name = body_json["name"]
+            u.surnames = body_json["surnames"]
+            u.save()
+            return JsonResponse({"status": "Todo OK"}, status=200)
+
+        return JsonResponse(json_response, status=200)

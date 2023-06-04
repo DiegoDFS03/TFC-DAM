@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b874e025-7ebc-40ee-8cc2-017fab3d6507" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Saved.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/fragment_saved.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Profile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/res/layout/fragment_profile.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Drawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Drawer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/Screens/Login.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/client/RestClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/example/gamesaverx/gamesaverx/client/RestClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameSaverX/GameSaverX/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameSaverX/GameSaverX/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameSaverX/rest_api/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameSaverX/rest_api/endpoints.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

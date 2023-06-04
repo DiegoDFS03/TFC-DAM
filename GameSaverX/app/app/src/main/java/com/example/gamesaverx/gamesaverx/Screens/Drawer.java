@@ -17,6 +17,8 @@ public class Drawer extends AppCompatActivity {
     Home homeFragment = new Home();
     Saved savedFragment = new Saved();
 
+    Profile profileFragment = new Profile();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,9 @@ public class Drawer extends AppCompatActivity {
             } else if (item.getItemId()==R.id.action_saved) {
                 loadFragment(savedFragment);
                 return true;
+            } else if (item.getItemId()==R.id.action_profile) {
+                loadFragment(profileFragment);
+
             }
             return false;
         }
