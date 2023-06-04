@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class Drawer extends AppCompatActivity {
     //Declaración de los fragments
     Home homeFragment = new Home();
+    Saved savedFragment = new Saved();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +36,9 @@ public class Drawer extends AppCompatActivity {
             if (item.getItemId()==R.id.action_home) {
                     loadFragment(homeFragment);
                     return true;
-
+            } else if (item.getItemId()==R.id.action_saved) {
+                loadFragment(savedFragment);
+                return true;
             }
             return false;
         }
