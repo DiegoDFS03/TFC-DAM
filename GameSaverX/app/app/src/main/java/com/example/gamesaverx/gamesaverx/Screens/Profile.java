@@ -76,8 +76,7 @@ public class Profile extends Fragment {
     View.OnClickListener editarlistener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(context,EditProfile.class);
-            startActivity(intent);
+
 
         }
     };

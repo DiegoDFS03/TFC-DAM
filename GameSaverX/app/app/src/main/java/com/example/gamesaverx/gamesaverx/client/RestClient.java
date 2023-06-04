@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -454,7 +453,7 @@ public class RestClient {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            name.setText("Hola,"+response.getString("name") + " " + response.getString("surnames"));
+                            name.setText(response.getString("name") + " " + response.getString("surnames"));
                             email.setText(response.getString("email"));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -470,76 +469,6 @@ public class RestClient {
                 context
         );
         queue.add(request);
-    }
-    public void fillProfile(EditText name, EditText surnames){
-
-        queue = Volley.newRequestQueue(context);
-
-        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
-                Request.Method.GET,
-                BASE_URL + "/v1/profile",
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            name.setText(response.getString("name"));
-                            surnames.setText(response.getString("surnames"));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                },
-                context
-        );
-
-        this.queue.add(request);
-    }
-
-    public void editProfile(EditText name, EditText surnames){
-
-        queue = Volley.newRequestQueue(context);
-
-        JSONObject body = new JSONObject();
-        try {
-            body.put("name", name.getText().toString());
-            body.put("surnames", surnames.getText().toString());
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
-                Request.Method.PUT,
-                BASE_URL + "/v1/profile",
-                body,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(context, "SE GUARDÓ CORRECTAMENTE", Toast.LENGTH_SHORT).show();
-                        //CAMBIO A LA SIGUIENTE PANTALLA
-                        Bundle bundle = new Bundle();
-                        bundle.putString("fragment", "profile");
-                        Intent intent = new Intent(context, Drawer.class);
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                        //FALTA LLAMAR AL FRAGMENT DE PERFIL
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                context
-        );
-
-        this.queue.add(request);
     }
 
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
