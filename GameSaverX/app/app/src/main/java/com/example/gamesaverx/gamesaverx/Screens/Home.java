@@ -72,6 +72,7 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
 
     @Override
     public void itemClick(Offer offer) {
+       getActivity().getFragmentManager().beginTransaction().replace(R.id.home_fragment,DetailFragment.newInstance(offer.getId())).commit();
 
     }
 

@@ -25,6 +25,7 @@ public class Drawer extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //Para que se abra el "HomeFragment" desde el principio
         loadFragment(homeFragment);
+
     }
 
     //Método para mostrar cada fragment
@@ -46,6 +47,9 @@ public class Drawer extends AppCompatActivity {
         transaction.replace(R.id.home_fragment, fragment);
         transaction.commit();
     }
+    @Override
+    public void onBackPressed(){
 
+    }
 
 }

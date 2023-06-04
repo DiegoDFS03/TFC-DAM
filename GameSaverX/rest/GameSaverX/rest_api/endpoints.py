@@ -95,12 +95,13 @@ def offers(request):
 
     if size is None:
         if offset is None:
-            ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('title',
-                                                                                 'store__name',
-                                                                                 'image',
-                                                                                 'discount_percentage',
-                                                                                 'original_price',
-                                                                                 'end_date')
+            ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('id',
+                                                                                   'title',
+                                                                                   'store__name',
+                                                                                   'image',
+                                                                                   'discount_percentage',
+                                                                                   'original_price',
+                                                                                   'end_date')
         else:
             try:
                 offset = int(offset)
@@ -123,30 +124,91 @@ def offers(request):
                 return JsonResponse({"error": "Parámetro offset erróneo"}, status=400)
 
             if title is None or len(title) == 0:
-                ofertas = Offer.objects.all().values_list('title',
+                ofertas = Offer.objects.all().values_list('id',
+                                                          'title',
                                                           'store__name',
                                                           'image',
                                                           'discount_percentage',
                                                           'original_price',
-                                                          'end_date')[offset:offset + size]
+                                                          'end_date',
+                                                          )[offset:offset + size]
             else:
-                ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('title',
-                                                                                     'store__name',
-                                                                                     'image',
-                                                                                     'discount_percentage',
-                                                                                     'original_price',
-                                                                                     'end_date')[offset:offset + size]
+                ofertas = Offer.objects.filter(Q(title__startswith=title)).values_list('id',
+                                                                                       'title',
+                                                                                       'store__name',
+                                                                                       'image',
+                                                                                       'discount_percentage',
+                                                                                       'original_price',
+                                                                                       'end_date',
+                                                                                       )[offset:offset + size]
 
     count = Offer.objects.count()
 
     results = []
     if ofertas is not None:
         for offer in ofertas:
-            results.append({"title": offer[0],
-                            "store__name": offer[1],
-                            "image": offer[2],
-                            "discount_percentage": offer[3],
-                            "original_price": offer[4],
-                            "end_date": offer[5]})
+            results.append({"id": offer[0],
+                            "title": offer[1],
+                            "store__name": offer[2],
+                            "image": offer[3],
+                            "discount_percentage": offer[4],
+                            "original_price": offer[5],
+                            "end_date": offer[6]})
 
     return JsonResponse({"count": count, "results": results}, safe=False)
+
+
+def offer(request, id_game):
+    if request.method != "GET":
+        return JsonResponse({"error": "HTTP method not supported"}, status=405)
+
+    try:
+        offer = Offer.objects.get(id=id_game)
+    except Offer.DoesNotExist:
+        return JsonResponse({"error": "No existe"}, status=404)
+
+    return JsonResponse({"id": id_game, "title": offer.title, "description": offer.description, "image": offer.image,
+                         "original_price": offer.original_price, "genre": offer.genre,
+                         "url": offer.url,
+                         "release_date": offer.release_date, "developer": offer.developer, "publisher": offer.publisher,
+                         "discount_percentage": offer.discount_percentage, "end_date": offer.end_date})
+
+@csrf_exempt
+def saved(request, id_game):
+    try:
+        v = Offer.objects.get(id=id_game)
+    except Offer.DoesNotExist:
+        return JsonResponse({"error": "No existe"}, status=404)
+
+    token_cabeceras = request.headers.get("Token")
+    if token_cabeceras is None:
+        return JsonResponse({"error": "Falta token en la cabecera"}, status=401)
+    else:
+        try:
+            u = Person.objects.get(token=token_cabeceras)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Usuario no logeado"}, status=401)
+
+    if request.method == "PUT":
+        try:
+            user_offer = UserOffer.objects.get(offer=v, person=u)
+            return JsonResponse({"status": "Todo OK"}, status=200)
+        except UserOffer.DoesNotExist:
+            new_user_offer = UserOffer(offer=v, person=u)
+            new_user_offer.save()
+            return JsonResponse({"status": "Todo OK"}, status=200)
+
+    elif request.method == "DELETE":
+        try:
+            user_offer = UserOffer.objects.get(offer=v, person=u)
+            user_offer.delete()
+            return JsonResponse({"status": "Todo OK"}, status=200)
+        except UserOffer.DoesNotExist:
+            return JsonResponse({"status": "Todo OK"}, status=200)
+
+    elif request.method == "GET":
+        try:
+            user_offer = UserOffer.objects.get(offer=v, person=u)
+            return JsonResponse({"status": "Todo OK"}, status=200)
+        except UserOffer.DoesNotExist:
+            return JsonResponse({"error": "No existe en guardados"}, status=404)
