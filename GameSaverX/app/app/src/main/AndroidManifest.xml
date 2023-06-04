@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".gamesaverx.Screens.EditProfile"
+            android:exported="false" />
+        <activity
             android:name=".gamesaverx.Screens.Drawer"
             android:exported="false" />
         <activity
