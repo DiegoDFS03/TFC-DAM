@@ -78,6 +78,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         holder.percentage_discount.setText(item.getDiscount_percentage()+"%");
         holder.discount_price.setText(discount_price+"€");
         holder.time_left.setText(time_left+" días restantes");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.itemClick(item);
+            }
+        });
     }
 
     @Override

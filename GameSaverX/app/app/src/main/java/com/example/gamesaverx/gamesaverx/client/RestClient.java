@@ -6,7 +6,10 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.gamesaverx.R;
+import com.example.gamesaverx.gamesaverx.Interfaces.IsSavedListener;
 import com.example.gamesaverx.gamesaverx.Interfaces.OnOfferClickListener;
 import com.example.gamesaverx.gamesaverx.Interfaces.ResponseListener;
 import com.example.gamesaverx.gamesaverx.Screens.Drawer;
@@ -26,6 +31,7 @@ import com.example.gamesaverx.gamesaverx.Screens.Login;
 import com.example.gamesaverx.gamesaverx.Screens.Register;
 import com.example.gamesaverx.gamesaverx.Utils.Offer;
 import com.example.gamesaverx.gamesaverx.Utils.RecyclerAdapter;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -33,8 +39,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,13 +217,13 @@ public class RestClient {
                             for (int i = 0; i < results.length(); i++) {
                                 JSONObject offer = results.getJSONObject(i);
                                 Offer newOffer = new Offer();
+                                newOffer.setId(offer.getString("id"));
                                 newOffer.setTitle(offer.getString("title"));
                                 newOffer.setStore(offer.getString("store__name"));
                                 newOffer.setImage(BASE_URL + offer.getString("image"));
                                 newOffer.setDiscount_percentage(String.valueOf(new BigDecimal(offer.getString("discount_percentage"))));
                                 newOffer.setOriginal_price(String.valueOf(new BigDecimal(offer.getString("original_price"))));
                                 newOffer.setEnd_date(offer.getString("end_date"));
-                                newOffer.setId(offer.getString("id"));
                                 itemList.add(newOffer);
                             }
                         } catch (JSONException e) {
@@ -231,6 +241,149 @@ public class RestClient {
 
                     }
                 }
+        );
+
+        queue.add(request);
+    }
+
+    public void offer(String id_game, Context context, TextView title, TextView description, ImageView image, TextView url, TextView original_price,TextView discount_price,
+                      TextView genre, TextView release_date, TextView developer, TextView publisher, TextView discount_percentage, TextView end_date) {
+        queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                BASE_URL + "/v1/offer/" + id_game,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        try {
+                            // Obtener los valores de la respuesta JSON
+                            String image_url = BASE_URL + response.getString("image");
+                            String titleText = response.getString("title");
+                            String descriptionText = response.getString("description");
+                            BigDecimal originalPriceValue = new BigDecimal(response.getString("original_price"));
+                            String genreText = response.getString("genre");
+                            String urlText = response.getString("url");
+                            String releaseDateText = response.getString("release_date");
+                            String developerText = response.getString("developer");
+                            String publisherText = response.getString("publisher");
+                            BigDecimal discountPercentageValue = new BigDecimal(response.getString("discount_percentage"));
+                            String endDateText = response.getString("end_date");
+
+                            Date releaseDate = inputFormat.parse(releaseDateText);
+                            Date endDate = inputFormat.parse(endDateText);
+
+                            releaseDateText = outputFormat.format(releaseDate);
+                            endDateText = outputFormat.format(endDate);
+
+                            // Calcular el precio de descuento
+                            BigDecimal discountPriceValue = originalPriceValue.multiply(discountPercentageValue)
+                                    .divide(new BigDecimal(100), 2, RoundingMode.DOWN);
+
+                            // Establecer los valores en los TextView correspondientes
+                            Picasso.get().load(image_url).into(image);
+                            title.setText(titleText);
+                            description.setText(descriptionText);
+                            original_price.setText(originalPriceValue.toString());
+                            original_price.setPaintFlags(original_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            discount_price.setText(discountPriceValue.toString());
+                            genre.setText(genreText);
+                            url.setText(urlText);
+                            release_date.setText(releaseDateText);
+                            developer.setText(developerText);
+                            publisher.setText(publisherText);
+                            discount_percentage.setText(discountPercentageValue.toString());
+                            end_date.setText(endDateText);
+                        } catch (JSONException | ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse.statusCode == 404) {
+                            Toast.makeText(context, "Esta oferta no existe", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        this.queue.add(request);
+    }
+
+
+    public void isFavourite(String id_game, IsSavedListener listener){
+
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/v1/offer/" + id_game + "/saved",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        listener.onResponseReceived(true);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onResponseReceived(false);
+                    }
+                },
+                context
+        );
+        this.queue.add(request);
+    }
+
+    public void addFavorites(String id_game, ImageButton savedButton) {
+
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.PUT,
+                BASE_URL + "/v1/offer/" + id_game + "/saved",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        savedButton.setBackgroundResource(R.drawable.ic_full_saved);
+                        savedButton.setEnabled(true);//HABILITA EL BOTÓN
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+                        savedButton.setEnabled(true);//HABILITA EL BOTÓN
+                    }
+                },
+                context
+        );
+        this.queue.add(request);
+    }
+
+    public void deleteFavorites(String id_game, ImageButton savedButton) {
+
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.DELETE,
+                BASE_URL + "/v1/offer/" + id_game + "/saved",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        savedButton.setBackgroundResource(R.drawable.ic_save);
+                        savedButton.setEnabled(true); //HABILITA EL BOTÓN
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Error al eliminar", Toast.LENGTH_SHORT).show();
+                        savedButton.setEnabled(true);//HABILITA EL BOTÓN
+                    }
+                },
+                context
         );
 
         queue.add(request);
