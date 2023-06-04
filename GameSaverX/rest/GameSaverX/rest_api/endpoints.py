@@ -173,6 +173,7 @@ def offer(request, id_game):
                          "release_date": offer.release_date, "developer": offer.developer, "publisher": offer.publisher,
                          "discount_percentage": offer.discount_percentage, "end_date": offer.end_date})
 
+
 @csrf_exempt
 def saved(request, id_game):
     try:
@@ -212,3 +213,28 @@ def saved(request, id_game):
             return JsonResponse({"status": "Todo OK"}, status=200)
         except UserOffer.DoesNotExist:
             return JsonResponse({"error": "No existe en guardados"}, status=404)
+
+
+@csrf_exempt
+def favourites(request):
+    token_cabeceras = request.headers.get("Token")
+    if token_cabeceras is None:
+        return JsonResponse({"error": "Falta token en la cabecera"}, status=401)
+    else:
+        try:
+            u = Person.objects.get(token=token_cabeceras)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Usuario no logeado"}, status=401)
+
+    if request.method == "GET":
+        favourites = []
+        offers = UserOffer.objects.filter(person__token=token_cabeceras)
+        for offer in offers:
+            favourites.append({"id": offer.offer.id,
+                               "title": offer.offer.title,
+                               "store__name": offer.offer.store.name,
+                               "image": offer.offer.image,
+                               "discount_percentage": offer.offer.discount_percentage,
+                               "original_price": offer.offer.original_price,
+                               "end_date": offer.offer.end_date})
+        return JsonResponse({"results": favourites}, safe=False)

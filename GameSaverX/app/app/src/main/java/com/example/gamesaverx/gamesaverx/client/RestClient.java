@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -197,6 +198,7 @@ public class RestClient {
                 });
         queue.add(request);
     }
+
     public void offers(String title, int size, int offset, OnOfferClickListener offerListener, RecyclerView recyclerView, ResponseListener listener) {
         queue = Volley.newRequestQueue(context);
 
@@ -207,7 +209,8 @@ public class RestClient {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        List<Offer> itemList = new ArrayList() {};
+                        List<Offer> itemList = new ArrayList() {
+                        };
                         int count = 0;
                         try {
                             count = response.getInt("count");
@@ -246,7 +249,7 @@ public class RestClient {
         queue.add(request);
     }
 
-    public void offer(String id_game, Context context, TextView title, TextView description, ImageView image, TextView url, TextView original_price,TextView discount_price,
+    public void offer(String id_game, Context context, TextView title, TextView description, ImageView image, TextView url, TextView original_price, TextView discount_price,
                       TextView genre, TextView release_date, TextView developer, TextView publisher, TextView discount_percentage, TextView end_date) {
         queue = Volley.newRequestQueue(context);
 
@@ -281,15 +284,17 @@ public class RestClient {
 
                             // Calcular el precio de descuento
                             BigDecimal discountPriceValue = originalPriceValue.multiply(discountPercentageValue)
-                                    .divide(new BigDecimal(100), 2, RoundingMode.DOWN);
+                                    .divide(new BigDecimal(100));
+                            BigDecimal discountPrice = originalPriceValue.subtract(discountPriceValue);
+                            discountPrice = discountPrice.setScale(2, RoundingMode.DOWN);
 
                             // Establecer los valores en los TextView correspondientes
                             Picasso.get().load(image_url).into(image);
                             title.setText(titleText);
                             description.setText(descriptionText);
-                            original_price.setText(originalPriceValue.toString());
+                            original_price.setText(originalPriceValue +"€");
                             original_price.setPaintFlags(original_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            discount_price.setText(discountPriceValue.toString());
+                            discount_price.setText(discountPrice.toString()+"€");
                             genre.setText(genreText);
                             url.setText(urlText);
                             release_date.setText(releaseDateText);
@@ -315,7 +320,7 @@ public class RestClient {
     }
 
 
-    public void isFavourite(String id_game, IsSavedListener listener){
+    public void isFavourite(String id_game, IsSavedListener listener) {
 
         JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
                 Request.Method.GET,
@@ -389,30 +394,77 @@ public class RestClient {
         queue.add(request);
     }
 
+    public void saved(RecyclerView recyclerView, OnOfferClickListener listener) {
+        queue = Volley.newRequestQueue(context);
 
-}
-class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
-    private Context context;
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/v1/saved",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            List<Offer> itemList = new ArrayList() {
+                            };
+                            JSONArray results = response.getJSONArray("results");
 
-    public JsonObjectRequestWithCustomAuth(int method,
-                                           String url,
-                                           @Nullable JSONObject jsonRequest,
-                                           Response.Listener<JSONObject> listener,
-                                           @Nullable Response.ErrorListener errorListener,
-                                           Context context) {
-        super(method, url, jsonRequest, listener, errorListener);
-        this.context = context;
+
+                            for (int i = 0; i < results.length(); i++) {
+                                JSONObject offer = results.getJSONObject(i);
+                                Offer newOffer = new Offer();
+                                newOffer.setId(offer.getString("id"));
+                                newOffer.setTitle(offer.getString("title"));
+                                newOffer.setStore(offer.getString("store__name"));
+                                newOffer.setImage(BASE_URL + offer.getString("image"));
+                                newOffer.setDiscount_percentage(String.valueOf(new BigDecimal(offer.getString("discount_percentage"))));
+                                newOffer.setOriginal_price(String.valueOf(new BigDecimal(offer.getString("original_price"))));
+                                newOffer.setEnd_date(offer.getString("end_date"));
+                                itemList.add(newOffer);
+                            }
+                            LinearLayoutManager llm = new LinearLayoutManager(context);
+                            recyclerView.setLayoutManager(llm);
+                            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(itemList, listener);
+                            recyclerView.setAdapter(recyclerAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                },
+                context
+        );
+        queue.add(request);
     }
 
-    @Override
-    public Map<String, String> getHeaders() throws AuthFailureError {
-        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String sessionToken = preferences.getString("tokenSession", null);
-        //PARA PROBAR LA PANTALLA
-        /*String sessionToken = "";*/
+    class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
+        private Context context;
 
-        HashMap<String, String> myHeaders = new HashMap<>();
-        myHeaders.put("Token", sessionToken);
-        return myHeaders;
+        public JsonObjectRequestWithCustomAuth(int method,
+                                               String url,
+                                               @Nullable JSONObject jsonRequest,
+                                               Response.Listener<JSONObject> listener,
+                                               @Nullable Response.ErrorListener errorListener,
+                                               Context context) {
+            super(method, url, jsonRequest, listener, errorListener);
+            this.context = context;
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+            String sessionToken = preferences.getString("tokenSession", null);
+            //PARA PROBAR LA PANTALLA
+            /*String sessionToken = "";*/
+
+            HashMap<String, String> myHeaders = new HashMap<>();
+            myHeaders.put("Token", sessionToken);
+            return myHeaders;
+        }
     }
 }
