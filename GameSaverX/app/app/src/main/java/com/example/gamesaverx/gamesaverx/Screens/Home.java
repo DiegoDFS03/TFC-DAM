@@ -29,7 +29,7 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
     private RestClient restClient;
     private List<Offer> items;
     private Context context;
-    private int size = 20;
+    private int size = 2000;
     private int offset = 0;
     private String query= "";
 
