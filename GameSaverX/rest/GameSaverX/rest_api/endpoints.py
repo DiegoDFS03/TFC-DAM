@@ -265,4 +265,67 @@ def profile(request):
             u.save()
             return JsonResponse({"status": "Todo OK"}, status=200)
 
-        return JsonResponse(json_response, status=200)
+
+        u.name = body_json["name"]
+        u.surnames = body_json["surnames"]
+        u.save()
+        return JsonResponse({"status": "OK"}, status=200)
+      return JsonResponse(json_response, status=200)
+
+@csrf_exempt
+def password(request):
+    if request.method != 'POST':
+        return JsonResponse({"error": "Método http no soportado"})
+
+    token_cabeceras = request.headers.get("Token")
+    if token_cabeceras is None:
+
+        body_json = json.loads(request.body)
+        try:
+            json_token = body_json['passwordToken']
+            json_password = body_json['newPassword']
+        except KeyError:
+            return JsonResponse({"error": "Faltán parámetros"}, status=400)
+        try:
+            user = Person.objects.get(password_token=json_token)
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Token inválido"}, status=404)
+
+        salted_and_hashed_pass = bcrypt.hashpw(json_password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
+        user.password_token = None
+        user.password = salted_and_hashed_pass
+        user.save()
+
+        return JsonResponse({"Mensaje": "Contraseña cambiada"}, status=201)
+
+    else:
+        try:
+
+            body_json = json.loads(request.body)
+
+            try:
+                json_password = body_json['oldPassword']
+                new_json_password = body_json['newPassword']
+
+            except KeyError:
+                return JsonResponse({"error": "Faltán parámetros"}, status=400)
+
+            u = Person.objects.get(token=token_cabeceras)
+
+            if bcrypt.checkpw(json_password.encode('utf8'), u.password.encode('utf8')):
+                salted_and_hashed_pass = bcrypt.hashpw(new_json_password.encode('utf8'), bcrypt.gensalt()).decode(
+                    'utf8')
+                u.password = salted_and_hashed_pass
+                u.save()
+
+                return JsonResponse({"Mensaje": "Contraseña cambiada"}, status=201)
+            else:
+                return JsonResponse({"error": "Contraseña no válida"}, status=404)
+
+
+
+        except Person.DoesNotExist:
+            return JsonResponse({"error": "Usuario no logeado"}, status=401)
+
+        
+
