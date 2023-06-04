@@ -440,6 +440,35 @@ public class RestClient {
                 context
         );
         queue.add(request);
+
+    }
+    public void profile(TextView name,TextView email){
+        queue = Volley.newRequestQueue(context);
+
+        JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/v1/profile",
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            name.setText(response.getString("name") + " " + response.getString("surnames"));
+                            email.setText(response.getString("email"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                },
+                context
+        );
+        queue.add(request);
     }
 
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
