@@ -25,6 +25,8 @@ public class Launcher extends AppCompatActivity {
             RestClient restClient = RestClient.getInstance(this);
             restClient.isLogged(sessionToken);
         }
+        RestClient restClient = RestClient.getInstance(this);
+        restClient.deleteExpiredOffers();
 
     }
 }

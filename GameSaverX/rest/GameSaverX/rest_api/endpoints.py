@@ -4,8 +4,11 @@ import secrets
 import bcrypt
 from django.db.models import Q
 from django.http import JsonResponse
+from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
-from .models import Person, Offer, Store, UserOffer
+
+
+from .models import Person, Offer, UserOffer
 
 
 def log(request):
@@ -239,6 +242,7 @@ def favourites(request):
                                "end_date": offer.offer.end_date})
         return JsonResponse({"results": favourites}, safe=False)
 
+
 @csrf_exempt
 def profile(request):
     token_cabeceras = request.headers.get("Token")
@@ -250,7 +254,6 @@ def profile(request):
         except Person.DoesNotExist:
             return JsonResponse({"error": "Usuario no logeado"}, status=401)
     if request.method == "GET":
-
         json_response = {
             "name": u.name,
             "surnames": u.surnames,
@@ -259,14 +262,12 @@ def profile(request):
         return JsonResponse(json_response, status=200)
 
     if request.method == "PUT":
-            body_json = json.loads(request.body)
+        body_json = json.loads(request.body)
 
-            u.name = body_json["name"]
-            u.surnames = body_json["surnames"]
-            u.save()
-            return JsonResponse({"status": "Todo OK"}, status=200)
-
-
+        u.name = body_json["name"]
+        u.surnames = body_json["surnames"]
+        u.save()
+        return JsonResponse({"status": "Todo OK"}, status=200)
 
 
 @csrf_exempt
@@ -323,3 +324,19 @@ def password(request):
 
         except Person.DoesNotExist:
             return JsonResponse({"error": "Usuario no logeado"}, status=401)
+
+
+def delete_offers(request):
+    if request.method != 'DELETE':
+        return JsonResponse({"error": "Método http no soportado"})
+    # Obtén la fecha actual
+    fecha_actual = now().date()
+
+    # Filtra las ofertas cuya fecha de finalización ha pasado
+    ofertas_vencidas = Offer.objects.filter(end_date__lt=fecha_actual)
+
+    # Elimina las ofertas vencidas
+    ofertas_vencidas.delete()
+
+
+
