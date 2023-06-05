@@ -9,6 +9,7 @@
 ## Índice
 - [Descripción](#descripción)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Caracteríticas](#caracteríticas)
 - [Instalación](#instalación)
 - [Uso](#uso)
 
@@ -19,3 +20,11 @@ Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de 
 - Django: Framework de desarrollo web en Python utilizado para la construcción del backend de la aplicación.
 - Android Studio: Se usa para desarrollar una interfaz de usuario para dispositivos móviles.
 - Base de Datos: Se utiliza una base de datos para almacenar la información de las ofertas, tiendas y usuarios.
+
+## Características
+
+## Instalación
+
+1.Clonar el repositorio : https://github.com/DiegoDFS03/TFC-DAM.git
+2.Abrir la carpeta app en Android Studio y lanzar la app
+3.En el terminal, situarse en la carpeta rest/
