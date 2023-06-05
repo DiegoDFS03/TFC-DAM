@@ -7,10 +7,10 @@ from django.http import JsonResponse
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
-
 from .models import Person, Offer, UserOffer
 
 
+# Método que comprueba que el token que devuelve es igual al de la persona
 def log(request):
     if request.method != 'GET':
         return JsonResponse({"error": "Método http no soportado"})
@@ -24,6 +24,7 @@ def log(request):
     return JsonResponse({"status": "ok"}, status=200)
 
 
+# Método que crea las credenciales para una nueva persona
 @csrf_exempt
 def register(request):
     if request.method != "POST":
@@ -57,6 +58,7 @@ def register(request):
         return JsonResponse({"is_created": True}, status=201)
 
 
+# Método que inicia sesión con las credenciales correspondientes y devuelve un token
 @csrf_exempt
 def sessions(request):
     if request.method != 'POST':
@@ -83,6 +85,7 @@ def sessions(request):
         return JsonResponse({"error": "Contraseña incorrecta"}, status=401)
 
 
+# Método que sirve para la búsqueda y el listado de las ofertas
 def offers(request):
     if request.method != 'GET':
         return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
@@ -161,6 +164,7 @@ def offers(request):
     return JsonResponse({"count": count, "results": results}, safe=False)
 
 
+# Metodo que devuelve los datos de una oferta en específico
 def offer(request, id_game):
     if request.method != "GET":
         return JsonResponse({"error": "HTTP method not supported"}, status=405)
@@ -177,6 +181,7 @@ def offer(request, id_game):
                          "discount_percentage": offer.discount_percentage, "end_date": offer.end_date})
 
 
+# Método que gestiona las ofertas de un usuario
 @csrf_exempt
 def saved(request, id_game):
     try:
@@ -218,6 +223,7 @@ def saved(request, id_game):
             return JsonResponse({"error": "No existe en guardados"}, status=404)
 
 
+# Método que guarda las ofertas de una persona en un lista
 @csrf_exempt
 def favourites(request):
     token_cabeceras = request.headers.get("Token")
@@ -243,6 +249,7 @@ def favourites(request):
         return JsonResponse({"results": favourites}, safe=False)
 
 
+# Método que manda el nombre,apellidos e email de una persona en específico
 @csrf_exempt
 def profile(request):
     token_cabeceras = request.headers.get("Token")
@@ -270,6 +277,7 @@ def profile(request):
         return JsonResponse({"status": "Todo OK"}, status=200)
 
 
+# Método que cambia la contraseña de una persona
 @csrf_exempt
 def password(request):
     if request.method != 'POST':
@@ -326,6 +334,7 @@ def password(request):
             return JsonResponse({"error": "Usuario no logeado"}, status=401)
 
 
+# Método que borra las ofertas con fechas anteriores a la fecha actual
 def delete_offers(request):
     if request.method != 'DELETE':
         return JsonResponse({"error": "Método http no soportado"})
@@ -335,8 +344,5 @@ def delete_offers(request):
     # Filtra las ofertas cuya fecha de finalización ha pasado
     ofertas_vencidas = Offer.objects.filter(end_date__lt=fecha_actual)
 
-    # Elimina las ofertas vencidas
+    # Elimina las ofertas expiradas
     ofertas_vencidas.delete()
-
-
-

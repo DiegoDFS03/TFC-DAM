@@ -54,6 +54,7 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
 
         peticion(query);
 
+
         return view;
     }
     @Override
@@ -79,7 +80,9 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
     private void peticion(String query) {
         restClient = RestClient.getInstance(context);
         restClient.offers(query, size, offset,this, recyclerView, this);
+        restClient.deleteExpiredOffers();
     }
+
 
     //Método que depende del numero de ofertas
     @Override
