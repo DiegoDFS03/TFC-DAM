@@ -9,9 +9,8 @@
 ## Índice
 - [Descripción](#descripción)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Caracteríticas](#caracteríticas)
+- [Caracteríticas](#características)
 - [Instalación](#instalación)
-- [Uso](#uso)
 
 ## Descripción
 Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de videojuegos. Permite a los usuarios explorar y encontrar las mejores ofertas disponibles en tiendas populares como Xbox y Playstation. La aplicación ofrece una interfaz intuitiva para navegar a través de las ofertas y guardar las ofertas favoritas de los usuarios.
@@ -22,6 +21,9 @@ Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de 
 - Base de Datos: Se utiliza una base de datos para almacenar la información de las ofertas, tiendas y usuarios.
 
 ## Características
+- `Funcionalidad 1` : Listado de ofertas actuales
+- `Funcionalidad 1a` : Detalles de una oferta especifica
+- `Funcionalidad 2` : Guardado de ofertas
 
 
 ## Instalación
