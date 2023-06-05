@@ -27,10 +27,11 @@ Este proyecto es una aplicación que lista las ofertas de diferentes tiendas de 
 
 
 ## Instalación
-1. Clonar el [repositorio](https://github.com/DiegoDFS03/TFC-DAM.git) </br>`git clone https://github.com/DiegoDFS03/TFC-DAM.git`
-2. Abrir la carpeta app con Android Studio y lanzarla 
-3. En el terminal, situarse en la carpeta rest/
-4. Instalar las dependencias necesarias </br> `pip install -r requirements.txt`
-5. Transladarse a la carpeta rest/GameSaverX
-6. Ejecutar en la terminal `python manage.py runserver`
-7. A disfrutar de GameSaverX
+1. Clonar el repositorio, en la terminal pon </br>`git clone https://github.com/DiegoDFS03/TFC-DAM.git`
+2. Muevete al repositorio con </br>`cd TFC-DAM`
+3. Abrir la carpeta app con Android Studio y lanzarla 
+4. En el terminal, situarse en la carpeta rest/
+5. Instalar las dependencias necesarias </br> `pip install -r requirements.txt`
+6. Transladarse a la carpeta rest/GameSaverX
+7. Ejecutar en la terminal `python manage.py runserver`
+8. A disfrutar de GameSaverX
