@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gamesaverx.R;
 import com.example.gamesaverx.gamesaverx.Interfaces.IsSavedListener;
@@ -69,6 +70,30 @@ public class RestClient {
             singleton = new RestClient(context);
         }
         return singleton;
+    }
+    public void deleteExpiredOffers() {
+        String url = BASE_URL+"/v1/delete_expired/"; // Reemplaza con la URL de tu servidor
+        queue = Volley.newRequestQueue(context);
+
+        // Crea una nueva solicitud de tipo DELETE
+        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // La solicitud se completó correctamente
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Ocurrió un error al realizar la solicitud
+                    }
+                });
+
+
+
+        // Agrega la solicitud a la RequestQueue
+        this.queue.add(request);
     }
 
     public void isLogged(String sessionToken) {

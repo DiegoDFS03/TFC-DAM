@@ -28,7 +28,8 @@ urlpatterns = [
     path('v1/offer/<int:id_game>', endpoints.offer),
     path('v1/offer/<int:id_game>/saved', endpoints.saved),
     path('v1/saved', endpoints.favourites),
-    path('v1/profile',endpoints.profile),
-    path('v1/password',endpoints.password)
+    path('v1/profile', endpoints.profile),
+    path('v1/password', endpoints.password),
+    path('v1/delete_expired', endpoints.delete_offers)
 
 ]
