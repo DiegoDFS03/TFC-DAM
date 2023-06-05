@@ -86,7 +86,7 @@ public class DetailFragment extends Fragment {
         restClient = RestClient.getInstance(context);
         restClient.offer(id,context,title,description,image,url,original_price,discount_price,genre,release_date,developer,publisher,discount_percentage,end_date);
 
-
+        //Aqui se comprueba si está guardado, si lo está cambia la imagen y el estado del botón adonde corresponda
         restClient.isFavourite(id, new IsSavedListener() {
             @Override
             public void onResponseReceived(boolean isSaved) {
@@ -101,6 +101,7 @@ public class DetailFragment extends Fragment {
         });
         super.onViewCreated(view, savedInstanceState);
     }
+    //Listener que comprueba el estado del boton y cambia su imagen
     private View.OnClickListener savelistener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -117,6 +118,7 @@ public class DetailFragment extends Fragment {
             }
         }
     };
+    //Listener que busca en el navegador la url de la oferta
     private View.OnClickListener urllistener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

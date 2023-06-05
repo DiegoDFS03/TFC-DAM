@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 import com.example.gamesaverx.R;
 import com.example.gamesaverx.gamesaverx.client.RestClient;
 
@@ -50,7 +51,7 @@ public class Profile extends Fragment {
 
         return view;
     }
-
+    //Listener que borra un valor de las sharedpreferences y lanza Login
     View.OnClickListener csesionlistener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -60,12 +61,14 @@ public class Profile extends Fragment {
             editor.apply();
             Intent intent = new Intent(context, Login.class);
             startActivity(intent);
+            getActivity().finish();
+
 
 
         }
     };
 
-
+//Listener que lanza ChangePassword
     View.OnClickListener contraseñalistener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -73,7 +76,7 @@ public class Profile extends Fragment {
             startActivity(intent);
         }
     };
-
+//Listener que lanza EditProfile
     View.OnClickListener editarlistener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -83,6 +86,7 @@ public class Profile extends Fragment {
 
         }
     };
+    //Método que manda la petición a RestClient
     private void peticion() {
         restClient = RestClient.getInstance(context);
         restClient.profile(name,email);

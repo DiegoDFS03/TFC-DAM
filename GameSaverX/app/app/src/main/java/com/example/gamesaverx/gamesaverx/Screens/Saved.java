@@ -30,7 +30,6 @@ public class Saved extends Fragment implements OnOfferClickListener, ResponseLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
         context = getActivity().getApplicationContext();
 
@@ -39,12 +38,12 @@ public class Saved extends Fragment implements OnOfferClickListener, ResponseLis
         peticion();
         return view;
     }
-
+    //Método que manda la petición a RestClient
     private void peticion() {
         restClient = RestClient.getInstance(context);
         restClient.saved(save_recycler,this);
     }
-
+    //Método que llama al Fragment DetailFragment cuando se pulsa una oferta en el recyclerview
     @Override
     public void itemClick(Offer offer) {
         getActivity().getFragmentManager().beginTransaction().replace(R.id.home_fragment, DetailFragment.newInstance(offer.getId())).commit();

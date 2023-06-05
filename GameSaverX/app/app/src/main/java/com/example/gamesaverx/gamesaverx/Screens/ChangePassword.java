@@ -35,6 +35,7 @@ public class ChangePassword extends AppCompatActivity {
         showPassword = findViewById(R.id.showPassword);
         showPassword.setOnClickListener(showPasswordListener);
     }
+    //Listener de boton que comprueba que los datos son correctos al cambiar de contraseña
     View.OnClickListener buttonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -51,7 +52,7 @@ public class ChangePassword extends AppCompatActivity {
             }
         }
     };
-
+//Listener que muestra la contraseña
     View.OnClickListener showPasswordListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

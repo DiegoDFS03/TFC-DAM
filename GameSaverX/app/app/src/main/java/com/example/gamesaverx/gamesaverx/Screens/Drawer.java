@@ -26,7 +26,7 @@ public class Drawer extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        //Para que se abra el "HomeFragment" desde el principio
+        //Para que se abra el "homeFragment" desde el principio
         loadFragment(homeFragment);
 
     }
@@ -43,6 +43,7 @@ public class Drawer extends AppCompatActivity {
                 return true;
             } else if (item.getItemId()==R.id.action_profile) {
                 loadFragment(profileFragment);
+                return true;
 
             }
             return false;
@@ -55,6 +56,7 @@ public class Drawer extends AppCompatActivity {
         transaction.replace(R.id.home_fragment, fragment);
         transaction.commit();
     }
+    //Método que sobrecarga el botón Back para que solo pueda ir atrás pulsando los elementos del drawer
     @Override
     public void onBackPressed(){
 

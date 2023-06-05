@@ -71,31 +71,28 @@ public class RestClient {
         }
         return singleton;
     }
+
+    //Método que borra las ofertas que ya expiraron
     public void deleteExpiredOffers() {
-        String url = BASE_URL+"/v1/delete_expired/"; // Reemplaza con la URL de tu servidor
+        String url = BASE_URL+"/v1/delete_expired/";
         queue = Volley.newRequestQueue(context);
 
-        // Crea una nueva solicitud de tipo DELETE
         StringRequest request = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // La solicitud se completó correctamente
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Ocurrió un error al realizar la solicitud
+
                     }
                 });
-
-
-
-        // Agrega la solicitud a la RequestQueue
         this.queue.add(request);
     }
-
+    //Método que comprueba el token de usuario, si lo recibe inicia sesión automáticamente y sino te manda a Login
     public void isLogged(String sessionToken) {
         queue = Volley.newRequestQueue(context);
 
@@ -116,7 +113,6 @@ public class RestClient {
                     public void onErrorResponse(VolleyError error) {
                         SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
                         preferences.edit().remove("tokenSession").commit();
-
                         Intent intent = new Intent(context, Login.class);
                         context.startActivity(intent);
                     }
@@ -126,7 +122,7 @@ public class RestClient {
 
         this.queue.add(request);
     }
-
+    //Método que crea un nuevo usuario en la base de datos
     public void register(TextView editTextName, TextView editTextSurnames, TextView editTextEmail, TextView editTextPassword, TextView editTextPassword2) {
         queue = Volley.newRequestQueue(context);
         JSONObject requestBody = new JSONObject();
@@ -173,7 +169,7 @@ public class RestClient {
                 });
         this.queue.add(request);
     }
-
+    //Método que comprueba el email  y la contraseña de un usuario, si está en la base de datos lo envía a la pantalla principal y le asigna un token
     public void login(EditText email, EditText password, Context context) {
         queue = Volley.newRequestQueue(context);
         JSONObject requestBody = new JSONObject();
@@ -223,7 +219,7 @@ public class RestClient {
                 });
         queue.add(request);
     }
-
+    //Método para listar todas la ofertas actuales en un recyclerview
     public void offers(String title, int size, int offset, OnOfferClickListener offerListener, RecyclerView recyclerView, ResponseListener listener) {
         queue = Volley.newRequestQueue(context);
 
@@ -273,7 +269,7 @@ public class RestClient {
 
         queue.add(request);
     }
-
+//Método que pide todos los campos de una oferta para poner cada campo en un textview
     public void offer(String id_game, Context context, TextView title, TextView description, ImageView image, TextView url, TextView original_price, TextView discount_price,
                       TextView genre, TextView release_date, TextView developer, TextView publisher, TextView discount_percentage, TextView end_date) {
         queue = Volley.newRequestQueue(context);
@@ -344,7 +340,7 @@ public class RestClient {
         this.queue.add(request);
     }
 
-
+//Método que comprueba si la oferta está guardada
     public void isFavourite(String id_game, IsSavedListener listener) {
 
         JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
@@ -367,7 +363,7 @@ public class RestClient {
         );
         this.queue.add(request);
     }
-
+//Método que añade la oferta a la lista de guardados
     public void addFavorites(String id_game, ImageButton savedButton) {
 
         JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
@@ -392,7 +388,7 @@ public class RestClient {
         );
         this.queue.add(request);
     }
-
+//Método que borra las ofertas de la lista de guardados
     public void deleteFavorites(String id_game, ImageButton savedButton) {
 
         JsonObjectRequestWithCustomAuth request = new JsonObjectRequestWithCustomAuth(
@@ -418,7 +414,7 @@ public class RestClient {
 
         queue.add(request);
     }
-
+//Método que indexa las ofertas de la lista guardados
     public void saved(RecyclerView recyclerView, OnOfferClickListener listener) {
         queue = Volley.newRequestQueue(context);
 
@@ -467,6 +463,7 @@ public class RestClient {
         queue.add(request);
 
     }
+    //Método que pide los datos del usuario y los mete sus respectivos textviews
     public void profile(TextView name,TextView email){
         queue = Volley.newRequestQueue(context);
 
@@ -495,7 +492,7 @@ public class RestClient {
         );
         queue.add(request);
     }
-
+    //Método que completa los edittext de editar perfil para conocer los anteriores datos
     public void fillProfile(EditText name, EditText surnames){
 
         queue = Volley.newRequestQueue(context);
@@ -526,7 +523,7 @@ public class RestClient {
 
         this.queue.add(request);
     }
-
+//Método que cambia los datos de nombre y apellidos de un usuario
     public void editProfile(EditText name, EditText surnames){
 
         queue = Volley.newRequestQueue(context);
@@ -561,6 +558,7 @@ public class RestClient {
 
         this.queue.add(request);
     }
+    //Método que cambia la contraseña de un usuario
     public void changePassword(EditText oldPassword, EditText newPassword){
 
         queue = Volley.newRequestQueue(context);
@@ -597,7 +595,7 @@ public class RestClient {
 
         this.queue.add(request);
     }
-
+//Clase utilizada para coger los token de usuario en los diferentes métodos que lo requieran
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
