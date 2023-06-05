@@ -29,7 +29,7 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
     private RestClient restClient;
     private List<Offer> items;
     private Context context;
-    private int size = 20;
+    private int size = 2000;
     private int offset = 0;
     private String query= "";
 
@@ -69,18 +69,19 @@ public class Home extends Fragment implements OnOfferClickListener, ResponseList
         peticion(query);
         return false;
     }
-
+    //Método que llama al Fragment DetailFragment cuando se pulsa una oferta en el recyclerview
     @Override
     public void itemClick(Offer offer) {
        getActivity().getFragmentManager().beginTransaction().replace(R.id.home_fragment,DetailFragment.newInstance(offer.getId())).commit();
 
     }
-
+    //Método que manda la peticion al Restclient
     private void peticion(String query) {
         restClient = RestClient.getInstance(context);
         restClient.offers(query, size, offset,this, recyclerView, this);
     }
 
+    //Método que depende del numero de ofertas
     @Override
     public void onOffersResponse(int count) {
 

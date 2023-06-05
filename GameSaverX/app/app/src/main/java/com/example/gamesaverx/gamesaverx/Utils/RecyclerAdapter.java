@@ -53,15 +53,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         BigDecimal ndiscountPercentage = new BigDecimal(discountPercentage);
 
 
-        // Multiplicar original_price y discount_percentage para obtener el precio con descuento
+        // Multiplicar original_price y discount_percentage para obtener cuanto descuenta la oferta
         BigDecimal discountedPrice = noriginalPrice.multiply(ndiscountPercentage.divide(BigDecimal.valueOf(100)));
+        //Obtener el precio con descuento
         BigDecimal discountPrice = noriginalPrice.subtract(discountedPrice);
         discountPrice = discountPrice.setScale(2, RoundingMode.DOWN);
+
         //Obtener la fecha actual y la fecha de final de oferta
         LocalDate currentDate = LocalDate.now();
         String endDate = item.getEnd_date();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate end_date = LocalDate.parse(endDate, formatter);
+        //Contar cuantos dias hay entre las dos fechas
         long durationInDays = ChronoUnit.DAYS.between(currentDate, end_date);
 
         //Pasar a String las variables anteriores

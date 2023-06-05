@@ -26,11 +26,12 @@ public class EditProfile extends AppCompatActivity {
 
 
         confirmar = findViewById(R.id.confirmar);
-        confirmar.setOnClickListener(eidtListener);
+        confirmar.setOnClickListener(editListener);
 
         restClient.fillProfile(nombre, apellidos);
     }
-    private View.OnClickListener eidtListener = new View.OnClickListener() {
+    //Listener que comprueba que los campos de los edittext no están vacios
+    private View.OnClickListener editListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (nombre.getText().length() == 0) {
